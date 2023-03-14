@@ -1,0 +1,101 @@
+{{> navbar}}
+{{> messages}}
+<script>
+    function signup_clicked(event) {
+        event.preventDefault();
+        var form = document.getElementById('signup-form');
+        let match = false;
+        let newUser;
+        form.classList.add('was-validated');
+        
+        if (form.checkValidity()) {
+            
+            if(match = $('#password').val() === $('#confirm-password').val()){
+                
+                newUser = Model.signup(
+                $('#name').val(),
+                $('#surname').val(),
+                $('#address').val(),
+                new Date($('#birth').val()),
+                $('#email').val(),
+                $('#password').val()
+                ).done(function(user){
+                    
+                    Messages.success.push('Signup success!');
+                    navigateTo(event, event.target.href);
+                }).fail(function(error){
+                    Messages.danger.push(`${error.statusText} (${error.status}): ${error.responseJSON.message}`);
+                    navigateTo(event, "/signup");
+                })
+            }else if(!(newUser === null || match)){
+                Messages.danger.push(`${error.statusText} (${error.status}): ${error.responseJSON.message}`);
+                navigateTo(event, "/signup");
+            } 
+
+        } else {
+            console.log('invalid');
+        }
+        return false;
+    }
+</script>
+
+<main id="signup-box" class="signup-box pt-5 pb-5 align-self-center rounded vh-100">
+        <div id="h2-box">
+            <h2 id="sign-title" class="p-2">Sign Up</h2>
+        </div>
+        <div id="form-box" class="container-fluid p-4">
+           
+    <form id="signup-form" class="w-100 needs-validation">
+
+            <div class="form-group m-3">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="What's your name?" required="">
+                <div class="invalid-feedback">The Name field cannot be empty</div>
+            </div>
+
+            <div class="form-group m-3">
+                <label for="surname">Surname</label>
+                <input type="text" class="form-control" id="surname" placeholder="What's your surname?" required="">
+                <div class="invalid-feedback">The Surname field cannot be empty.</div>
+            </div>
+            <div class="form-group m-3">
+                <label for="birth">Birth</label>
+                <input type="date" class="form-control" id="birth" placeholder="How old are you?" required="">
+                <div class="invalid-feedback">The Birth field cannot be empty. You must insert a valid date</div>
+            </div>
+
+            <div class="form-group m-3">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" placeholder="What's your address?" required="">
+                <div class="invalid-feedback">The Address field cannot be empty</div>
+            </div>
+
+            <div class="form-group m-3">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" required="">
+                <div class="invalid-feedback">The email field cannot be empty. Please insert a valid email</div>
+            </div>
+
+            <div class="form-group m-3">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" required="">
+                <div class="invalid-feedback">The Password field cannot be empty</div>
+            </div>
+
+            <div class="form-group m-3">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm-password" placeholder="Password" required="">
+                <div class="invalid-feedback">The Confirm Password field cannot be empty</div>
+            </div>
+
+            <div class="container-fluid d-flex justify-content-end">
+                <!--<button type="submit" id="form-button" class="btn btn-primary col-4">Submit</button required="">-->
+                <a id="button-self" class="btn btn-primary col" href="/signin" onclick="signup_clicked(event)" role="button">Sign in</a>
+                <div class="invalid-feedback">The email field cannot be empty</div>
+            </div>
+
+        </div>
+    </form>
+</main>
+
+{{> footer}}

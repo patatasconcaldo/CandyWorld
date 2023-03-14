@@ -1,0 +1,65 @@
+{{> navbar}}
+{{> messages}}
+
+<script>
+    function details(event){
+        event.preventDefault();
+        navigateTo(event, event.target.href)
+    }
+</script>
+<main id="profile-box" class="pt-5 pb-5 align-self-center rounded vh-100">
+
+    <div id="customer-info" class="container-fluid mb-5">
+        <h2 class="h2-profile">Profile</h2>
+        <div class="m-3">
+            <p><span class="fw-bold">Name: </span>{{profile.name}}</p>
+            <p><span class="fw-bold">Surname: </span>{{profile.surname}}</p>
+            <p><span class="fw-bold">Birth: </span>{{dateFormat profile.birth}}</p>
+            <p><span class="fw-bold">Address: </span>{{profile.address}}</p>
+            <p><span class="fw-bold">Email: </span>{{profile.email}}</p>
+        </div>
+    </div>
+
+    <div id="order-list" class="container-fluid">
+        <h2 class="h2-profile">Order List</h2>
+        <div id="orders-table" class="m-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Number</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr>
+                        <td>{{this.date}}</td>
+                        <td>{{this.number}}</td>
+                        <td>{{orderTotalPrice this.orderItems true}} €</td>
+                        <td>
+                            <a id="button-self" class="btn btn-primary col" href="/order/id/{{this.number}}" onclick="details(event)">Details</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <p id="noProducts" class="text-danger">{{displayOrders orders}}</p>
+    </div>
+
+</main>
+
+<script>
+        /*This function hide the table and the cart summary if the user haven't added anything-*/
+        $(function () {
+            var table = document.getElementsByClassName("table");
+            if (orders.length === 0) {
+                table[0].classList.add("d-none");
+            }
+        })
+
+    </script>
+
+
+{{> footer}}

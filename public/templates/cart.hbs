@@ -1,0 +1,101 @@
+{{> navbar}}
+<!-- MAIN CONTENT -->
+{{> messages}}
+<script>
+    function removeItem(event, all) {
+        event.preventDefault();
+        var pid = event.target.id;
+        Model.removeItem(pid, all).done(function () {
+
+            navigateTo(event, event.target.href)
+        });
+    }
+
+</script>
+<main id="shopping-cart" class="pt-5 pb-5 align-self-center rounded vh-100">
+
+
+    <h1 class="h1-cart mb-4 pt-2 pb-2">Shopping Cart</h1>
+    <div id="order-list" class="container-fluid">
+        <h2 class="h2-profile">Items</h2>
+        <div id="orders-table container-fluid" class="m-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    {{#each cart}}
+                    <tr>
+                        <td>{{this.qty}}</td>
+                        <td>{{this.product.title}}</td>
+                        <td>{{formatPrice this.product.price 1}}</td>
+                        <td>{{formatPrice this.product.price this.qty}}</td>
+                        <td class="button-td">
+                            <li class="nav-item dropdown">
+                                <a id="remove-button" class="nav-link dropdown-toggle bg-danger text-light rounded"
+                                    href="#" role="button" id="cartDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">Remove</a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark bg-light text-light"
+                                    aria-labelledby="cartDropdown">
+                                    <li class="d-flex">
+                                        <a href="/cart" id="{{this.product._id}}" class="dropdown-item text-dark"
+                                            onclick="removeItem(event, false)">One</a>
+                                    </li>
+                                    <li><a href="/cart" id="{{this.product._id}}" class="dropdown-item text-dark"
+                                            onclick="removeItem(event, true)">All</a></li>
+                                </ul>
+                            </li>
+                        </td>
+                    </tr>
+                    {{/each}}
+
+
+
+                </tbody>
+
+            </table>
+            <p id="noProducts" class="text-danger">{{displayCart cart}}</p>
+        </div>
+        <div id="cart-summary">
+            <div class="m-3">
+                <p><span class="fw-bold">Subtotal: </span><span id="subtotal">{{orderPriceWithoutTaxes cart}} €</span>
+                </p>
+                <p><span class="fw-bold">Tax: </span>{{taxes cart}} €</p>
+                <p><span class="fw-bold">Total: </span><span id="total">{{orderTotalPrice cart false}} €</span></p>
+            </div>
+            <div class="container-fluid d-flex flex-row justify-content-end mb-4">
+                <a id="button-self" class="btn btn-primary col" href="/purchase"
+                    onclick="navigateTo(event, event.target.href)" role="button">Comfirm</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /*This function hide the table and the cart summary if the user haven't added anything-*/
+        $(function () {
+            var table = document.getElementsByClassName("table");
+            var summary = document.getElementById("cart-summary");
+            let cart = Model.getCartQty().done(function (qty) {
+                if (qty == 0) {
+                    table[0].classList.add("d-none");
+                    summary.classList.add("d-none");
+                }
+            })
+
+        })
+
+    </script>
+
+</main>
+
+
+{{> footer}}

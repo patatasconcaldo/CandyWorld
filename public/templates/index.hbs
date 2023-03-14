@@ -1,0 +1,57 @@
+{{> navbar}}
+<!-- MAIN CONTENT -->
+{{> messages}}
+<script>
+    function addItem(event) {
+        event.preventDefault();
+        Model.addItem(event.target.id).done(function () {
+        console.log(event.target.href)
+            navigateTo(event.target.href); // Or route();
+        }).fail(function () {
+            console.error('ADDITEM ERROR ',
+                error.status,
+                error.statusText);
+        });
+        
+    };
+</script>
+<main class="pt-5 pb-5 align-self-center rounded">
+
+    <div class="container">
+        <div class="row gy-4">
+            <!-- CARDS -->
+            {{#each products}}
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="card text-dark">
+                    <div class="card-header">{{this.title}}</div>
+                    <div class="card-body">
+                        <img src="{{this.url}}" class="card-image img-fluid shadow bg-white rounded" />
+                        <div class="container-fluid d-flex-column mt-3">
+                            <p class="card-text description align-self-start">
+                                {{this.description}}
+                            </p>
+
+                            <div id="button-container" class="container-fluid d-flex justify-content-around">
+                                <p>
+                                    <span class="price">{{formatPrice this.price 1}}</span>
+                                </p>
+
+                                <div>
+
+                                    <a id="{{this._id}}"  href="/" onclick="addItem(event)" class="button-self btn btn-primary ml-3 
+                                        {{#unless ../user}}disabled{{/unless}}">Buy!</a>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+
+        </div>
+    </div>
+    </div>
+</main>
+{{> footer}}

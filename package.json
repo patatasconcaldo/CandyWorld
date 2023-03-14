@@ -1,0 +1,17 @@
+{
+  "name": "game-shop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.1",
+    "mongoose": "^6.10.3",
+    "morgan": "^1.10.0"
+  },
+  "description": ""
+}

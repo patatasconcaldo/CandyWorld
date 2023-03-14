@@ -1,0 +1,11 @@
+[{
+  "_id": {
+    "$oid": "640f7dc4d6aaf7d2250a6f98"
+  },
+  "title": "a",
+  "description": "a",
+  "price": {
+    "$numberDecimal": "1.1"
+  },
+  "url": "a"
+}]

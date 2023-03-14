@@ -1,0 +1,140 @@
+{{> navbar}}
+<!-- MAIN CONTENT -->
+{{> messages}}
+<script>
+    $(function () {
+        var table = document.getElementsByClassName("purchase-form");
+        Model.getCart().done(function (cart) {
+            if (cart.length == 0) {
+                table[0].classList.add("d-none");
+            }
+        })
+    })
+
+    function purchase_clicked(event) {
+        event.preventDefault();
+        let date = new Date();
+        let today = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+        var form = document.getElementById('purchase-form');
+        let order;
+        form.classList.add('was-validated');
+
+        if (form.checkValidity()) {
+            
+            order = {
+                oid: new Date().getTime(),
+                date: today,
+                address: $('#address').val(),
+                cardNumber: $('#cardnumber').val(),
+                cardHolder: $('#cardowner').val(),
+                orderItems: []
+            }
+
+            Model.addOrder(order).done(function(oid){
+                
+                if(oid){
+                    navigateTo(event, "/order/id/" + oid.toString());
+                }
+                
+            }).fail(function(){
+                navigateTo(event,"/order/id/999999999999")
+            })
+            
+        } else {
+            console.log('invalid');
+        }
+        return false;
+    }
+</script>
+<main id="purchase-box" class="pt-5 pb-5 align-self-center rounded">
+
+
+    <div id="order-list" class="container-fluid mb-5">
+        <h2 class="h2-profile">Purchase</h2>
+        <div id="orders-table" class="m-3">
+
+            <form id="purchase-form" class="purchase-form w-100 needs-validation">
+                <div class="form-group m-3">
+                    <label for="date-field">Date</label>
+                    <div id="purchase-date">
+                        <p>{{today}}</p>
+                    </div>
+                </div>
+
+                <div class="form-group m-3">
+                    <label for="address-field">Address</label>
+                    <input type="text" class="form-control" id="address" placeholder="Enter your Address" required="">
+                </div>
+
+                <div class="form-group m-3">
+                    <label for="cardnumber-field">Card Number</label>
+                    <input type="text" class="form-control" id="cardnumber" placeholder="Enter your Card Number"
+                        required="">
+                </div>
+
+                <div class="form-group m-3">
+                    <label for="cardowner-field">Card Owner</label>
+                    <input type="text" class="form-control" id="cardowner" placeholder="Card Owner" required="">
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div id="order-list" class="container-fluid">
+        <h2 class="h2-profile">Items</h2>
+        <div id="orders-table" class="m-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{#each shoppingCart}}
+                    <tr>
+                        <td>{{this.qty}}</td>
+                        <td>{{this.product.title}}</td>
+                        <td>{{this.product.price}} €</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div id="purchase-summary" class="m-3">
+            <p><span class="fw-bold">Subtotal: </span>{{orderPriceWithoutTaxes shoppingCart}} €</p>
+            <p><span class="fw-bold">Tax: </span>{{taxes shoppingCart}} €</p>
+            <p><span class="fw-bold">Total: </span>{{orderTotalPrice shoppingCart false}} €</p>
+            <div class="container-fluid d-flex flex-row justify-content-end mb-4">
+                <a id="button-self" class="btn btn-primary col" href="/api/orders/id/"
+                    onclick="purchase_clicked(event)" role="button">Purchase</a>
+            </div>
+        </div>
+        <p id="noProducts" class="text-danger">{{displayCart shoppingCart}}</p>
+    </div>
+
+
+
+</main>
+<script>
+    /*This function hide the table and the cart summary if the user haven't added anything*/
+    $(function () {
+        let table = document.getElementsByClassName("table");
+        let form = document.getElementById("orders-table")
+        let summary = document.getElementById("order-list");
+        let summar = document.getElementById("purchase-summary");
+        let qty = Model.getCartQty().done(function (qty) {
+            if (qty == 0) {
+                table[0].classList.add("d-none");
+                form.classList.add("d-none");
+                summary.classList.add("d-none");
+                summar.classList.add("d-none");
+            }
+        })
+
+    })
+</script>
+
+{{> footer}}

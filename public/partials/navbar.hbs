@@ -1,0 +1,72 @@
+
+<nav id="nav" class="container-fluid navbar navbar-expand-md navbar-dark">
+    <a id="logo" href="#" onclick="navigateTo(event, '/')"><img src="/images/candy.png" class=" img-fluid"></img></a>
+    <div class="container collapse navbar-collapse justify-content-end" id="navbarContent">
+
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="greetings-box" class="d-flex-column container-fluid">
+            <div class="col-12  justify-content-start">
+                <h1 id="greetings1">
+                    <a id="link" href="/" onclick="navigateTo(event, event.target.href)">
+
+                        WELCOME TO
+
+                    </a>
+                </h1>
+
+            </div>
+            <div class="col-12 justify-content-end">
+                <h1 id="greetings2">
+                    <a id="link" href="/" onclick="navigateTo(event, event.target.href)">
+
+                        CANDY WORLD!
+
+                    </a>
+                </h1>
+            </div>
+        </div>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            <ul class="navbar-nav mb-2 mb-md-0">
+
+                {{#if user}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="cartDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">Cart <span id="cart-bubble">{{cartQty}}</span></a>
+                        
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="cartDropdown">
+                        <li class="d-flex">
+                            <a class="dropdown-item" href="/cart" onclick="navigateTo(event, event.target.href)">Show cart</a>
+                        </li>
+                        <li><a class="dropdown-item" href="/purchase"
+                                onclick="navigateTo(event, event.target.href)">Purchase</a></li>
+                    </ul>
+                </li>
+                {{/if}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">User</a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userDropdown">
+                        {{#unless user}}
+                        <li><a class="dropdown-item" href="/signin" onclick="navigateTo(event, event.target.href)">Sign
+                                in</a></li>
+                        <li><a class="dropdown-item" href="/signup" onclick="navigateTo(event, event.target.href)">Sign
+                                up</a></li>
+                        {{/unless}}
+                        {{#if user}}
+                        <li><a class="dropdown-item" href="/profile"
+                                onclick="navigateTo(event, event.target.href)">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/" onclick="Model.signout(); navigateTo(event, event.target.navigateTo)">Sign out</a></li>
+                        {{/if}}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+</nav>

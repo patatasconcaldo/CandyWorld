@@ -1,0 +1,51 @@
+{{> navbar}}
+<!-- MAIN CONTENT -->
+{{> messages}}
+<main id="signup-box" class="pt-5 pb-5 align-self-center rounded vh-100">
+
+    <div id="customer-info" class="container-fluid mb-5">
+        <h2 class="h2-profile">{{order.number}}</h2>
+        <div class="m-3">
+            <p><span class="fw-bold">Date: </span>{{today}}</p>
+            <p><span class="fw-bold">Address: </span>{{order.address}}</p>
+            <p><span class="fw-bold">Card number: </span>{{order.cardNumber}}</p>
+            <p><span class="fw-bold">Card holder: </span>{{order.cardHolder}}</p>
+
+        </div>
+    </div>
+
+    <div id="order-list" class="container-fluid">
+        <h2 class="h2-profile">Products</h2>
+        <div id="orders-table" class="m-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   {{#each order.orderItems}}
+                    <tr>
+                        <td>{{this.qty}}</td>
+                        <td>{{this.product.title}}</td>
+                        <td>{{this.price}} €</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="m-3">
+            <p><span class="fw-bold">Subtotal: </span>{{orderPriceWithoutTaxes order.orderItems}} €</p>
+            <p><span class="fw-bold">Tax: </span>{{taxes order.orderItems}} €</p>
+            <p><span class="fw-bold">Total: </span>{{orderTotalPrice order.orderItems}} €</p>
+        </div>
+    </div>
+
+
+
+</main>
+
+
+{{> footer}}

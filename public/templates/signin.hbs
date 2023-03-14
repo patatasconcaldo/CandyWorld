@@ -1,0 +1,59 @@
+{{> navbar}}
+{{> messages}}
+<script>
+    function signin_clicked(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var form = document.getElementById('signin-form');
+        form.classList.add('was-validated');
+        if (!form.checkValidity()) {
+            $(form).addClass('was-validated');
+            return false;
+        }
+        Model.signin($('#email').val(), $('#password').val()).done(function (user) {
+                
+                Messages.success.push('Welcome back!');
+                navigateTo(event, '/');
+            }).fail(function (error) {
+                Messages.danger.push(`${error.statusText} (${error.status}): ${error.responseJSON.message}`);
+                navigateTo(event, '/signin');
+            });
+    }
+</script>
+
+<main id="signin-box" class="pt-5 pb-5 align-self-center rounded vh-100">
+
+    <div id="h2-box">
+        <h2 id="sign-title" class="p-2">Sign In</h2>
+    </div>
+    <div id="form-box" class="container-fluid p-4">
+        <form id="signin-form" class="needs-validation" novalidate>
+            <div class="form-group m-3">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" required="">
+                <div class="invalid-feedback">The email address field is incorrect or hasn't been filled</div>
+            </div>
+
+            <div class="form-group m-3">
+                <label for="password">Password</label>
+                <input type="password" class="form-control needs-validation" id="password" placeholder="Password"
+                    required="">
+                <div class="invalid-feedback">The password field is incorrect or hasn't been filled</div>
+            </div>
+
+            <div class="container-fluid row">
+                <div class="form-check m-3 col-8">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Check me out</label>
+                </div>
+                <a id="button-self" class="btn btn-primary col" href="/index" onclick="signin_clicked(event)"
+                    role="button">Sign in</a>
+
+            </div>
+        </form>
+    </div>
+</main>
+
+
+<!-- FOOTER -->
+{{> footer}}
